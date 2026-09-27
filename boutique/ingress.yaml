@@ -4,6 +4,14 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: boutique
+  annotations:
+    # ArgoCD juge un Ingress sain à la présence d'une adresse dans son
+    # status.loadBalancer. Traefik ne la renseigne pas sur ce cluster : son
+    # service est en ClusterIP, sans EXTERNAL-IP à publier. L'Ingress
+    # fonctionne pourtant, une requête sur boutique.local répond HTTP 200.
+    # Sans cette annotation, l'application resterait Progressing en
+    # permanence : un voyant qui ne dit rien de l'état réel.
+    argocd.argoproj.io/ignore-healthcheck: "true"
 spec:
   ingressClassName: traefik
   rules:
