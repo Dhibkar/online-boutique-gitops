@@ -8,3 +8,16 @@ namespace: boutique
 resources:
   - kubernetes-manifests.yaml
   - ingress.yaml
+
+# Les manifests d'Online Boutique ne déclarent pas `replicas`. Un champ absent
+# de l'état désiré n'est pas réconcilié : un `kubectl scale` à la main passait
+# donc inaperçu d'ArgoCD. On le déclare ici pour que le nombre de replicas
+# devienne la propriété de Git.
+patches:
+  - patch: |
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: frontend
+      spec:
+        replicas: 1
