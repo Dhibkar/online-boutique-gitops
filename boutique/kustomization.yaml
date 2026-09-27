@@ -1,0 +1,10 @@
+# Pose le namespace une fois pour les 34 objets, au lieu de le répéter.
+# ArgoCD bascule en mode kustomize à la seule présence de ce fichier.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: boutique
+
+resources:
+  - kubernetes-manifests.yaml
+  - ingress.yaml
